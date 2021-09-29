@@ -23,6 +23,9 @@ public class PushNotificationProps {
         return idAsString == null ? null : Integer.parseInt(idAsString);
     }
 
+    public String getChannelId() {
+        return getBundleStringFirstNotNull("gcm.notification.android_channel_id", "android_channel_id");
+    }
 
     public Bundle asBundle() {
         return (Bundle) mBundle.clone();

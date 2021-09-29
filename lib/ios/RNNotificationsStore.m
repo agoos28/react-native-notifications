@@ -46,24 +46,30 @@ NSMutableDictionary* _backgroundActionCompletionHandlers;
 - (void)completeAction:(NSString *)completionKey {
     void (^completionHandler)() = (void (^)())[_actionCompletionHandlers valueForKey:completionKey];
     if (completionHandler) {
-        completionHandler();
-        [_actionCompletionHandlers removeObjectForKey:completionKey];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            completionHandler();
+            [_actionCompletionHandlers removeObjectForKey:completionKey];
+        });
     }
 }
 
 - (void)completePresentation:(NSString *)completionKey withPresentationOptions:(UNNotificationPresentationOptions)presentationOptions {
     void (^completionHandler)() = (void (^)(UNNotificationPresentationOptions))[_presentationCompletionHandlers valueForKey:completionKey];
     if (completionHandler) {
-        completionHandler(presentationOptions);
-        [_presentationCompletionHandlers removeObjectForKey:completionKey];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            completionHandler(presentationOptions);
+            [_presentationCompletionHandlers removeObjectForKey:completionKey];
+        });
     }
 }
 
 - (void)completeBackgroundAction:(NSString *)completionKey withBackgroundFetchResult:(UIBackgroundFetchResult)backgroundFetchResult {
     void (^completionHandler)() = (void (^)(UIBackgroundFetchResult))[_backgroundActionCompletionHandlers valueForKey:completionKey];
     if (completionHandler) {
-        completionHandler(backgroundFetchResult);
-        [_backgroundActionCompletionHandlers removeObjectForKey:completionKey];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            completionHandler(backgroundFetchResult);
+            [_backgroundActionCompletionHandlers removeObjectForKey:completionKey];
+        });
     }
 }
 
