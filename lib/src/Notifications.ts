@@ -11,6 +11,7 @@ import { NotificationChannel } from './interfaces/NotificationChannel';
 import { NotificationsIOS } from './NotificationsIOS';
 import { NotificationsAndroid } from './NotificationsAndroid';
 import { NotificationFactory } from './DTO/NotificationFactory';
+import { NotificationPermissionOptions } from './interfaces/NotificationPermissions';
 
 export class NotificationsRoot {
   public readonly _ios: NotificationsIOS;
@@ -37,7 +38,7 @@ export class NotificationsRoot {
       this.notificationFactory
     );
     this.eventsRegistry = new EventsRegistry(this.nativeEventsReceiver, this.completionCallbackWrapper);
-    this.eventsRegistryIOS = new EventsRegistryIOS(this.nativeEventsReceiver);
+    this.eventsRegistryIOS = new EventsRegistryIOS(this.nativeEventsReceiver, this.completionCallbackWrapper);
 
     this._ios = new NotificationsIOS(this.commands, this.eventsRegistryIOS);
     this._android = new NotificationsAndroid(this.commands);
@@ -46,15 +47,15 @@ export class NotificationsRoot {
   /**
    * registerRemoteNotifications
    */
-  public registerRemoteNotifications() {
-    this.ios.registerRemoteNotifications();
+  public registerRemoteNotifications(options?: NotificationPermissionOptions) {
+    this.ios.registerRemoteNotifications(options);
     this.android.registerRemoteNotifications();
   }
 
   /**
    * postLocalNotification
    */
-  public postLocalNotification(notification: Notification, id: number) {
+  public postLocalNotification(notification: Notification, id?: number) {
     return this.commands.postLocalNotification(notification, id);
   }
 
@@ -75,7 +76,7 @@ export class NotificationsRoot {
   /**
    * cancelLocalNotification
   */
-  public cancelLocalNotification(notificationId: string) {
+  public cancelLocalNotification(notificationId: number) {
     return this.commands.cancelLocalNotification(notificationId);
   }
 
