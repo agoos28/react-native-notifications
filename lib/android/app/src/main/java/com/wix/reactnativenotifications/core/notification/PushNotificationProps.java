@@ -35,6 +35,10 @@ public class PushNotificationProps {
         return mBundle.containsKey("google.message_id");
     }
 
+    public boolean isDataOnlyPushNotification() {
+        return getTitle() == null && getBody() == null;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder(1024);
